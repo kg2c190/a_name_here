@@ -9,32 +9,85 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.ToString;
 
-@Table(name="tb;_assets")
+
+
+@Table(name="tbl_assets")
 @Entity
-@Setter
-@Getter
 @ToString
-public class Asset {
-	
-	
+public class Asset {	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID")
+	@Column(name="id")
 	private long assetID;
 	
-	@Column(name= "purchase_Data")
-	private Date purchaseDate;
+	private String name;
+	
+	//purchase_date
+	@CreationTimestamp
+	@Column(name= "purchase_date")
+	private Date purchasedate;
+	
 	
 	@Column(name= "notes")
 	private String conditionNotes;
 	
-	private String Category;
+	private String category;
 	
-	private String assignmentStatus;
+	//Assignment_Status
+	@Column(name= "Assignment_Status")
+	private String assignmentstatus;
+
+	public long getAssetID() {
+		return assetID;
+	}
+
+	public void setAssetID(long assetID) {
+		this.assetID = assetID;
+	}
+
+	public Date getPurchasedate() {
+		return purchasedate;
+	}
+
+	public void setPurchasedate(Date purchasedate) {
+		this.purchasedate = purchasedate;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getConditionNotes() {
+		return conditionNotes;
+	}
+
+	public void setConditionNotes(String conditionNotes) {
+		this.conditionNotes = conditionNotes;
+	}
+
+	public String getAssignmentstatus() {
+		return assignmentstatus;
+	}
+
+	public void setAssignmentstatus(String assignmentstatus) {
+		this.assignmentstatus = assignmentstatus;
+	}
 	
 	
 	
