@@ -21,7 +21,7 @@ import lombok.ToString;
 public class Asset {	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name="sNo")
 	private long assetID;
 	
 	private String name;
@@ -40,6 +40,8 @@ public class Asset {
 	//Assignment_Status
 	@Column(name= "Assignment_Status")
 	private String assignmentstatus;
+	
+	private String managedBy;
 
 	public long getAssetID() {
 		return assetID;
@@ -88,7 +90,13 @@ public class Asset {
 	public void setAssignmentstatus(String assignmentstatus) {
 		this.assignmentstatus = assignmentstatus;
 	}
-	
-	
+
+	public String getManagedBy() {
+		return managedBy;
+	}
+
+	public void setManagedBy(String managedBy) {
+		this.managedBy = managedBy;
+	}
 	
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nonesofar.springboot.entity.Asset;
 import com.nonesofar.springboot.entity.Category;
 import com.nonesofar.springboot.repository.CategoryRepo;
 
@@ -21,6 +20,9 @@ public class CategoryController {
 	@Autowired
 	CategoryRepo catRepo;
 
+	
+	
+	//Create new Categories
 	@PostMapping("/categories")
 	public ResponseEntity<Category> save(@RequestBody Category category) {
 		try {
@@ -30,6 +32,8 @@ public class CategoryController {
 		}
 	}
 
+	
+	//Get all categories
 	@GetMapping("/categories")
 	public ResponseEntity<List<Category>> getAllcategories() {
 		try {
@@ -43,10 +47,12 @@ public class CategoryController {
 		}
 	}
 
-	@PutMapping("/categories/{UID}/{categoryName}/{description}")
-	public void updateItemName(@PathVariable long UID, @PathVariable String categoryName,
+	
+	//Update Categories
+	@PutMapping("/categories/{uID}/{categoryName}/{description}")
+	public void updateItemName(@PathVariable long uID, @PathVariable String categoryName,
 			@PathVariable String description) {
-		Category aCategory = catRepo.findById(UID).get();
+		Category aCategory = catRepo.findById(uID).get();
 		aCategory.setCategoryName(categoryName);
 		aCategory.setDescription(description);
 	}
