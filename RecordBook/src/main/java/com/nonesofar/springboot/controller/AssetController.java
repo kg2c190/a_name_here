@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +46,7 @@ public class AssetController {
 	}
 
 	@GetMapping("/assets/{name}")
-	public ResponseEntity<List<Asset>> getSpecificlAssets(@PathVariable String name) {
+	public ResponseEntity<List<Asset>> getSpecificAssets(@PathVariable String name) {
 		try {
 			System.out.println("clean " + name);
 			List<Asset> assetList = assetRepo.findAll();
@@ -54,16 +55,13 @@ public class AssetController {
 			for (Asset asset : assetList) {
 				System.out.println("Searching " + asset.getName());
 				if (asset.getName().equals(name)) {
-					System.out.println("Match Found");
 					searchMatches.add(asset);
 				}
 			}
 
 			if (assetList.isEmpty() || assetList.size() == 0) {
-				System.out.println("im null bruh");
 				return new ResponseEntity<List<Asset>>(HttpStatus.NO_CONTENT);
 			}
-			System.out.println("i aint null bruh");
 			return new ResponseEntity<List<Asset>>(searchMatches, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -71,16 +69,60 @@ public class AssetController {
 
 	}
 
-	@PutMapping("/assets/{id}/{name}/{Assignment_Status}")
-	public void updateItemName(@PathVariable long id, @PathVariable String name,
+	@PutMapping("/assets/{sNo}/{name}/{Assignment_Status}")
+	public ResponseEntity<Asset> updateItem(@PathVariable long sNo, @PathVariable String name,
 			@PathVariable String Assignment_Status) {
+		try {
+			Asset anAsset = assetRepo.findById(sNo).get();
+			anAsset.setName(name);
+			anAsset.setAssignmentstatus(Assignment_Status);
 
-		Asset anAsset = assetRepo.findById(id).get();
-		anAsset.setName(name);
-		anAsset.setAssignmentstatus(Assignment_Status);
-		assetRepo.save(anAsset);
+			return new ResponseEntity<>(assetRepo.save(anAsset), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-		System.out.println(id + "  " + name);
+	@PutMapping("/assets/{sNo}/{managedBy}")
+	public ResponseEntity<Asset> assignManager(@PathVariable long sNo, @PathVariable String managedBy) {
+		try {
+			Asset anAsset = assetRepo.findById(sNo).get();
+			anAsset.setManagedBy(managedBy);
+			anAsset.setAssignmentstatus("Assigned");
+			assetRepo.save(anAsset);
+			return new ResponseEntity<>(assetRepo.save(anAsset), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	
+	@PutMapping("/assets/{sNo}/{managedBy}")
+	public ResponseEntity<Asset> assignManagder(@PathVariable long sNo, @PathVariable String managedBy) {
+		try {
+			Asset anAsset = assetRepo.findById(sNo).get();
+			anAsset.setManagedBy(managedBy);
+			anAsset.setAssignmentstatus("Assigned");
+			assetRepo.save(anAsset);
+			return new ResponseEntity<>(assetRepo.save(anAsset), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@DeleteMapping("/assets/{sNo}")
+	public ResponseEntity<Asset> deleteEntry(@PathVariable long sNo) {
+		try {
+			if (!assetRepo.getById(sNo).getAssignmentstatus().equalsIgnoreCase("assigned")) {
+				Asset anAsset = assetRepo.findById(sNo).get();
+				assetRepo.deleteById(sNo);
+				return new ResponseEntity<>(anAsset, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }
